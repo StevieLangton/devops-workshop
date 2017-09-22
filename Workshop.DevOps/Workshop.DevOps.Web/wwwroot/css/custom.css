@@ -1,0 +1,12 @@
+﻿.navbar {
+    background-color: #428bca;
+    border-color: #428bca;
+}
+
+.navbar a{
+  color: white !important;
+}
+
+.navbar a:hover{
+  color: black !important;
+}

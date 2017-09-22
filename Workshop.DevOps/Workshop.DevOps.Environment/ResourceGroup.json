@@ -1,0 +1,166 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "AdministratorLogin": {
+      "type": "string"
+    },
+    "AdministratorPassword": {
+      "type": "securestring"
+    },
+    "ServerName": {
+      "type": "string"
+    },
+    "WebAppName": {
+      "type": "string"
+    },
+    "WebAppSlotName": {
+      "type": "string"
+    },
+    "Location": {
+      "type": "string"
+    }
+  },
+  "resources": [
+    {
+      "name": "[parameters('ServerName')]",
+      "type": "Microsoft.Sql/servers",
+      "location": "[parameters('Location')]",
+      "tags": {
+        "displayName": "SqlServer"
+      },
+      "apiVersion": "2014-04-01-preview",
+      "properties": {
+        "administratorLogin": "[parameters('AdministratorLogin')]",
+        "administratorLoginPassword": "[parameters('AdministratorPassword')]"
+      },
+      "resources": [
+        {
+          "name": "mydb",
+          "type": "databases",
+          "location": "[parameters('Location')]",
+          "tags": {
+            "displayName": "Database"
+          },
+          "apiVersion": "2014-04-01-preview",
+          "dependsOn": [
+            "[resourceId('Microsoft.Sql/servers/', parameters('ServerName'))]"
+          ],
+          "properties": {
+            "edition": "Basic",
+            "collation": "SQL_Latin1_General_CP1_CI_AS",
+            "requestedServiceObjectiveName": "Basic"
+          }
+        },
+        {
+          "name": "mydb.test",
+          "type": "databases",
+          "location": "[parameters('Location')]",
+          "tags": {
+            "displayName": "Database"
+          },
+          "apiVersion": "2014-04-01-preview",
+          "dependsOn": [
+            "[resourceId('Microsoft.Sql/servers/', parameters('ServerName'))]"
+          ],
+          "properties": {
+            "edition": "Basic",
+            "collation": "SQL_Latin1_General_CP1_CI_AS",
+            "requestedServiceObjectiveName": "Basic"
+          }
+        },
+        {
+          "type": "firewallrules",
+          "apiVersion": "2014-04-01-preview",
+          "dependsOn": [
+            "[resourceId('Microsoft.Sql/servers/', parameters('ServerName'))]"
+          ],
+          "location": "[parameters('Location')]",
+          "name": "AllowAllWindowsAzureIps",
+          "properties": {
+            "endIpAddress": "0.0.0.0",
+            "startIpAddress": "0.0.0.0"
+          }
+        }
+      ]
+    },
+    {
+      "apiVersion": "2015-08-01",
+      "name": "MyPlan",
+      "type": "Microsoft.Web/serverfarms",
+      "location": "[parameters('Location')]",
+      "tags": {
+        "displayName": "HostingPlan"
+      },
+      "sku": {
+        "name": "S1",
+        "capacity": "1"
+      },
+      "properties": {
+        "name": "MyPlan"
+      }
+    },
+    {
+      "apiVersion": "2015-08-01",
+      "name": "[parameters('WebAppName')]",
+      "type": "Microsoft.Web/sites",
+      "location": "[parameters('Location')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/serverFarms/', 'MyPlan')]"
+      ],
+      "tags": {
+        "[concat('hidden-related:', resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', 'MyPlan')]": "empty",
+        "displayName": "Website"
+      },
+      "properties": {
+        "name": "[parameters('WebAppName')]",
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', 'MyPlan')]"
+      },
+      "resources": [
+        {
+          "apiVersion": "2015-08-01",
+          "type": "config",
+          "name": "connectionstrings",
+          "dependsOn": [
+            "[resourceId('Microsoft.Web/Sites/', parameters('WebAppName'))]"
+          ],
+          "properties": {
+            "DefaultConnection": {
+              "value": "[concat('Data Source=tcp:', reference(resourceId('Microsoft.Sql/servers/', parameters('ServerName'))).fullyQualifiedDomainName, ',1433;Initial Catalog=mydb', ';User Id=', parameters('administratorLogin'), '@', parameters('ServerName'), ';Password=', parameters('AdministratorPassword'), ';')]",
+              "type": "SQLServer"
+            }
+          }
+        },
+        {
+          "apiVersion": "2015-08-01",
+          "name": "[parameters('WebAppSlotName')]",
+          "type": "slots",
+          "location": "[parameters('Location')]",
+          "dependsOn": [
+            "[resourceId('Microsoft.Web/Sites', parameters('WebAppName'))]"
+          ],
+          "properties": {
+          },
+          "resources": [
+            {
+              "apiVersion": "2015-08-01",
+              "type": "config",
+              "name": "connectionstrings",
+              "dependsOn": [
+                "[resourceId('Microsoft.Web/Sites/Slots', parameters('WebAppName'), parameters('WebAppSlotName'))]"
+              ],
+              "properties": {
+                "DefaultConnection": {
+                  "value": "[concat('Data Source=tcp:', reference(resourceId('Microsoft.Sql/servers/', parameters('ServerName'))).fullyQualifiedDomainName, ',1433;Initial Catalog=mydb.test', ';User Id=', parameters('administratorLogin'), '@', parameters('ServerName'), ';Password=', parameters('AdministratorPassword'), ';')]",
+                  "type": "SQLServer"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+
+
+  ]
+}

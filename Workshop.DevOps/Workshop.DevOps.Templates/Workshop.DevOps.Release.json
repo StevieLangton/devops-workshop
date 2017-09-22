@@ -1,0 +1,250 @@
+{
+  "source": 2,
+  "id": 1,
+  "name": "Workshop.DevOps.Release",
+  "description": null,
+  "path": "\\",
+  "variables": {
+    "ResourceGroupName": { "value": "devops-workshop" },
+    "WebAppName": { "value": "devops-workshop" },
+    "WebAppSlotName": { "value": "PreProd" }
+  },
+  "variableGroups": [],
+  "environments": [
+    {
+      "id": 1,
+      "name": "PreProd",
+      "rank": 1,
+      "variables": {},
+      "preDeployApprovals": {
+        "approvals": [
+          {
+            "rank": 1,
+            "isAutomated": true,
+            "isNotificationOn": false,
+            "id": 1
+          }
+        ]
+      },
+      "deployStep": {
+        "tasks": [],
+        "id": 4
+      },
+      "postDeployApprovals": {
+        "approvals": [
+          {
+            "rank": 1,
+            "isAutomated": true,
+            "isNotificationOn": false,
+            "id": 5
+          }
+        ]
+      },
+      "deployPhases": [
+        {
+          "deploymentInput": {
+            "parallelExecution": { "parallelExecutionType": "none" },
+            "skipArtifactsDownload": false,
+            "queueId": 12,
+            "demands": [],
+            "enableAccessToken": false,
+            "timeoutInMinutes": 0,
+            "jobCancelTimeoutInMinutes": 1,
+            "condition": "succeeded()",
+            "overrideInputs": {}
+          },
+          "rank": 1,
+          "phaseType": 1,
+          "name": "Run on agent",
+          "workflowTasks": [
+            {
+              "taskId": "497d490f-eea7-4f2b-ab94-48d9c1acdcb1",
+              "version": "3.*",
+              "name": "Deploy Azure App Service",
+              "refName": "AzureRmWebAppDeployment1",
+              "enabled": true,
+              "alwaysRun": false,
+              "continueOnError": false,
+              "timeoutInMinutes": 0,
+              "definitionType": null,
+              "overrideInputs": {},
+              "condition": "succeeded()",
+              "inputs": {
+                "WebAppName": "$(WebAppName)",
+                "WebAppKind": "app",
+                "DeployToSlotFlag": "true",
+                "ResourceGroupName": "$(ResourceGroupName)",
+                "SlotName": "$(WebAppSlotName)",
+                "DockerNamespace": "",
+                "DockerRepository": "",
+                "DockerImageTag": "",
+                "StartupCommand": "",
+                "VirtualApplication": "",
+                "Package": "$(System.DefaultWorkingDirectory)\\**\\*.zip",
+                "WebAppUri": "",
+                "ScriptType": "",
+                "InlineScript": ":: You can provide your deployment commands here. One command per line.",
+                "ScriptPath": "",
+                "GenerateWebConfig": "false",
+                "WebConfigParameters": "",
+                "AppSettings": "",
+                "TakeAppOfflineFlag": "true",
+                "UseWebDeploy": "true",
+                "SetParametersFile": "",
+                "RemoveAdditionalFilesFlag": "true",
+                "ExcludeFilesFromAppDataFlag": "false",
+                "AdditionalArguments": "",
+                "RenameFilesFlag": "false",
+                "XmlTransformation": "false",
+                "XmlVariableSubstitution": "false",
+                "JSONFiles": ""
+              }
+            }
+          ]
+        }
+      ],
+      "environmentOptions": {
+        "emailNotificationType": "OnlyOnFailure",
+        "emailRecipients": "release.environment.owner;release.creator",
+        "skipArtifactsDownload": false,
+        "timeoutInMinutes": 0,
+        "enableAccessToken": false,
+        "publishDeploymentStatus": true
+      },
+      "demands": [],
+      "conditions": [
+        {
+          "name": "ReleaseStarted",
+          "conditionType": 1,
+          "value": ""
+        }
+      ],
+      "executionPolicy": {
+        "concurrencyCount": 0,
+        "queueDepthCount": 0
+      },
+      "schedules": [],
+      "retentionPolicy": {
+        "daysToKeep": 30,
+        "releasesToKeep": 3,
+        "retainBuild": true
+      },
+      "processParameters": {},
+      "properties": {}
+    },
+    {
+      "id": 2,
+      "name": "Prod",
+      "rank": 2,
+      "variables": {},
+      "preDeployApprovals": {
+        "approvals": [
+          {
+            "rank": 1,
+            "isAutomated": false,
+            "isNotificationOn": false,
+            "approver": {
+            },
+            "id": 7
+          }
+        ],
+        "approvalOptions": {
+          "requiredApproverCount": 0,
+          "releaseCreatorCanBeApprover": true,
+          "autoTriggeredAndPreviousEnvironmentApprovedCanBeSkipped": false,
+          "enforceIdentityRevalidation": false,
+          "timeoutInMinutes": 0
+        }
+      },
+      "deployStep": {
+        "tasks": [],
+        "id": 3
+      },
+      "postDeployApprovals": {
+        "approvals": [
+          {
+            "rank": 1,
+            "isAutomated": true,
+            "isNotificationOn": false,
+            "id": 6
+          }
+        ]
+      },
+      "deployPhases": [
+        {
+          "deploymentInput": {
+            "parallelExecution": { "parallelExecutionType": "none" },
+            "skipArtifactsDownload": false,
+            "queueId": 12,
+            "demands": [],
+            "enableAccessToken": false,
+            "timeoutInMinutes": 0,
+            "jobCancelTimeoutInMinutes": 1,
+            "condition": "succeeded()",
+            "overrideInputs": {}
+          },
+          "rank": 1,
+          "phaseType": 1,
+          "name": "Run on agent",
+          "workflowTasks": [
+            {
+              "taskId": "f045e430-8704-11e6-968f-e717e6411619",
+              "version": "0.*",
+              "name": "Manage Azure App Service - Slot Swap",
+              "refName": "AzureAppServiceManage2",
+              "enabled": true,
+              "alwaysRun": false,
+              "continueOnError": false,
+              "timeoutInMinutes": 0,
+              "definitionType": null,
+              "overrideInputs": {},
+              "condition": "succeeded()",
+              "inputs": {
+                "Action": "Swap Slots",
+                "WebAppName": "$(WebAppName)",
+                "SpecifySlot": "false",
+                "ResourceGroupName": "$(ResourceGroupName)",
+                "SourceSlot": "$(WebAppSlotName)",
+                "SwapWithProduction": "True",
+                "TargetSlot": "",
+                "PreserveVnet": "false",
+                "Slot": "",
+                "ExtensionsList": "",
+                "OutputVariable": ""
+              }
+            }
+          ]
+        }
+      ],
+      "environmentOptions": {
+        "emailNotificationType": "OnlyOnFailure",
+        "emailRecipients": "release.environment.owner;release.creator",
+        "skipArtifactsDownload": false,
+        "timeoutInMinutes": 0,
+        "enableAccessToken": false,
+        "publishDeploymentStatus": true
+      },
+      "demands": [],
+      "conditions": [
+        {
+          "name": "PreProd",
+          "conditionType": 2,
+          "value": "4"
+        }
+      ],
+      "executionPolicy": {
+        "concurrencyCount": 0,
+        "queueDepthCount": 0
+      },
+      "schedules": [],
+      "retentionPolicy": {
+        "daysToKeep": 30,
+        "releasesToKeep": 3,
+        "retainBuild": true
+      },
+      "processParameters": {},
+      "properties": {}
+    }
+  ],
+  "releaseNameFormat": "Release-$(rev:r)"
+}
