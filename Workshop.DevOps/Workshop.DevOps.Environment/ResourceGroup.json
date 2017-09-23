@@ -16,16 +16,16 @@
     },
     "WebAppSlotName": {
       "type": "string"
-    },
-    "Location": {
-      "type": "string"
     }
+  },
+  "variables": {
+    "Location": "West Europe"
   },
   "resources": [
     {
       "name": "[parameters('ServerName')]",
       "type": "Microsoft.Sql/servers",
-      "location": "[parameters('Location')]",
+      "location": "[variables('Location')]",
       "tags": {
         "displayName": "SqlServer"
       },
@@ -38,7 +38,7 @@
         {
           "name": "mydb",
           "type": "databases",
-          "location": "[parameters('Location')]",
+          "location": "[variables('Location')]",
           "tags": {
             "displayName": "Database"
           },
@@ -55,7 +55,7 @@
         {
           "name": "mydb.test",
           "type": "databases",
-          "location": "[parameters('Location')]",
+          "location": "[variables('Location')]",
           "tags": {
             "displayName": "Database"
           },
@@ -75,7 +75,7 @@
           "dependsOn": [
             "[resourceId('Microsoft.Sql/servers/', parameters('ServerName'))]"
           ],
-          "location": "[parameters('Location')]",
+          "location": "[variables('Location')]",
           "name": "AllowAllWindowsAzureIps",
           "properties": {
             "endIpAddress": "0.0.0.0",
@@ -88,7 +88,7 @@
       "apiVersion": "2015-08-01",
       "name": "MyPlan",
       "type": "Microsoft.Web/serverfarms",
-      "location": "[parameters('Location')]",
+      "location": "[variables('Location')]",
       "tags": {
         "displayName": "HostingPlan"
       },
@@ -104,7 +104,7 @@
       "apiVersion": "2015-08-01",
       "name": "[parameters('WebAppName')]",
       "type": "Microsoft.Web/sites",
-      "location": "[parameters('Location')]",
+      "location": "[variables('Location')]",
       "dependsOn": [
         "[resourceId('Microsoft.Web/serverFarms/', 'MyPlan')]"
       ],
@@ -135,7 +135,7 @@
           "apiVersion": "2015-08-01",
           "name": "[parameters('WebAppSlotName')]",
           "type": "slots",
-          "location": "[parameters('Location')]",
+          "location": "[variables('Location')]",
           "dependsOn": [
             "[resourceId('Microsoft.Web/Sites', parameters('WebAppName'))]"
           ],
