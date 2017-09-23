@@ -137,7 +137,7 @@
               "definitionType": "task"
             },
             "inputs": {
-              "PathtoPublish": "Workshop.DevOps.Db",
+              "PathtoPublish": "Workshop.DevOps/Workshop.DevOps.Db",
               "ArtifactName": "database",
               "ArtifactType": "Container",
               "TargetPath": "\\\\my\\share\\$(Build.DefinitionName)\\$(Build.BuildNumber)",
@@ -187,15 +187,6 @@
     ]
   },
   "quality": 1,
-  "queue": {
-    "id": 12,
-    "name": "Hosted VS2017",
-    "pool": {
-      "id": 4,
-      "name": "Hosted VS2017",
-      "isHosted": true
-    }
-  },
   "id": 4,
   "name": "Workshop.DevOps.Build",
   "uri": "vstfs:///Build/Definition/4",
