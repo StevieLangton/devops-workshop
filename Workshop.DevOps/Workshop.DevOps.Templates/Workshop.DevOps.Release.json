@@ -81,7 +81,6 @@
               "inputs": {
                 "ConnectedServiceNameSelector": "ConnectedServiceNameARM",
                 "ConnectedServiceName": "",
-                "ConnectedServiceNameARM": "da26eaa2-4a86-4d81-9d9a-f06a50ea615e",
                 "ServerName": "$(ServerName)",
                 "DatabaseName": "$(TestDatabaseName)",
                 "SqlUsername": "$(AdministratorLogin)",
@@ -131,7 +130,6 @@
               "overrideInputs": {},
               "condition": "succeeded()",
               "inputs": {
-                "ConnectedServiceName": "da26eaa2-4a86-4d81-9d9a-f06a50ea615e",
                 "WebAppName": "$(WebAppName)",
                 "WebAppKind": "app",
                 "DeployToSlotFlag": "true",
@@ -259,7 +257,6 @@
               "inputs": {
                 "ConnectedServiceNameSelector": "ConnectedServiceNameARM",
                 "ConnectedServiceName": "",
-                "ConnectedServiceNameARM": "da26eaa2-4a86-4d81-9d9a-f06a50ea615e",
                 "ServerName": "$(ServerName)",
                 "DatabaseName": "$(DatabaseName)",
                 "SqlUsername": "$(AdministratorLogin)",
@@ -309,7 +306,6 @@
               "overrideInputs": {},
               "condition": "succeeded()",
               "inputs": {
-                "ConnectedServiceName": "da26eaa2-4a86-4d81-9d9a-f06a50ea615e",
                 "Action": "Swap Slots",
                 "WebAppName": "$(WebAppName)",
                 "SpecifySlot": "false",
