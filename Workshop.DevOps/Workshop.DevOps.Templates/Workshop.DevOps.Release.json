@@ -81,7 +81,7 @@
               "inputs": {
                 "ConnectedServiceNameSelector": "ConnectedServiceNameARM",
                 "ConnectedServiceName": "",
-                "ServerName": "$(ServerName)",
+                "ServerName": "$(ServerName).database.windows.net",
                 "DatabaseName": "$(TestDatabaseName)",
                 "SqlUsername": "$(AdministratorLogin)",
                 "SqlPassword": "$(AdministratorPassword)",
@@ -257,7 +257,7 @@
               "inputs": {
                 "ConnectedServiceNameSelector": "ConnectedServiceNameARM",
                 "ConnectedServiceName": "",
-                "ServerName": "$(ServerName)",
+                "ServerName": "$(ServerName).database.windows.net",
                 "DatabaseName": "$(DatabaseName)",
                 "SqlUsername": "$(AdministratorLogin)",
                 "SqlPassword": "$(AdministratorPassword)",
