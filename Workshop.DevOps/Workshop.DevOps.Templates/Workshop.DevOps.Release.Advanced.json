@@ -1,8 +1,7 @@
 {
   "source": 2,
-  "id": 1,
-  "revision": 20,
-  "name": "Workshop.DevOps.Release",
+  "id": 6,
+  "name": "Workshop.DevOps.Release.Advanced",
   "description": null,
   "path": "\\",
   "variables": {
@@ -12,16 +11,17 @@
       "isSecret": true
     },
     "DatabaseName": { "value": "mydb" },
+    "Location": { "value": "West Europe" },
     "ResourceGroupName": { "value": "" },
     "ServerName": { "value": "" },
     "TestDatabaseName": { "value": "mydb.test" },
-    "WebAppName": { "value": "devops-fm" },
-    "WebAppSlotName": { "value": "PreProd" }
+    "WebAppName": { "value": "" },
+    "WebAppSlotName": { "value": "preprod" }
   },
   "variableGroups": [],
   "environments": [
     {
-      "id": 1,
+      "id": 11,
       "name": "PreProd",
       "rank": 1,
       "variables": {},
@@ -31,13 +31,13 @@
             "rank": 1,
             "isAutomated": true,
             "isNotificationOn": false,
-            "id": 1
+            "id": 32
           }
         ]
       },
       "deployStep": {
         "tasks": [],
-        "id": 4
+        "id": 35
       },
       "postDeployApprovals": {
         "approvals": [
@@ -45,7 +45,7 @@
             "rank": 1,
             "isAutomated": true,
             "isNotificationOn": false,
-            "id": 5
+            "id": 36
           }
         ]
       },
@@ -54,7 +54,7 @@
           "deploymentInput": {
             "parallelExecution": { "parallelExecutionType": "none" },
             "skipArtifactsDownload": false,
-            "queueId": 10,
+            "queueId": 12,
             "demands": [],
             "enableAccessToken": false,
             "timeoutInMinutes": 0,
@@ -82,13 +82,13 @@
                 "ConnectedServiceNameSelector": "ConnectedServiceNameARM",
                 "ConnectedServiceName": "",
                 "ConnectedServiceNameARM": "da26eaa2-4a86-4d81-9d9a-f06a50ea615e",
-                "ServerName": "$(ServerName)",
+                "ServerName": "$(ServerName).database.windows.net",
                 "DatabaseName": "$(TestDatabaseName)",
                 "SqlUsername": "$(AdministratorLogin)",
                 "SqlPassword": "$(AdministratorPassword)",
                 "TaskNameSelector": "SqlTask",
                 "DacpacFile": "",
-                "SqlFile": "$(System.DefaultWorkingDirectory)/Workshop.DevOps.Build/database/script.sql",
+                "SqlFile": "$(System.DefaultWorkingDirectory)/Workshop.DevOps.Build.Advanced/database/script.sql",
                 "SqlInline": "",
                 "PublishProfile": "",
                 "AdditionalArguments": "",
@@ -179,9 +179,9 @@
       "demands": [],
       "conditions": [
         {
-          "name": "ReleaseStarted",
-          "conditionType": 1,
-          "value": ""
+          "name": "Infra",
+          "conditionType": 2,
+          "value": "4"
         }
       ],
       "executionPolicy": {
@@ -198,12 +198,18 @@
       "properties": {}
     },
     {
-      "id": 2,
+      "id": 12,
       "name": "Prod",
       "rank": 2,
       "variables": {},
       "preDeployApprovals": {
         "approvals": [
+          {
+            "rank": 1,
+            "isAutomated": false,
+            "isNotificationOn": false,
+            "id": 33
+          }
         ],
         "approvalOptions": {
           "requiredApproverCount": 0,
@@ -215,7 +221,7 @@
       },
       "deployStep": {
         "tasks": [],
-        "id": 3
+        "id": 34
       },
       "postDeployApprovals": {
         "approvals": [
@@ -223,7 +229,7 @@
             "rank": 1,
             "isAutomated": true,
             "isNotificationOn": false,
-            "id": 6
+            "id": 37
           }
         ]
       },
@@ -232,7 +238,7 @@
           "deploymentInput": {
             "parallelExecution": { "parallelExecutionType": "none" },
             "skipArtifactsDownload": false,
-            "queueId": 10,
+            "queueId": 12,
             "demands": [],
             "enableAccessToken": false,
             "timeoutInMinutes": 0,
@@ -247,7 +253,7 @@
             {
               "taskId": "ce85a08b-a538-4d2b-8589-1d37a9ab970f",
               "version": "1.*",
-              "name": "Execute Azure SQL : SqlTask",
+              "name": "Execute Azure SQL : DacpacTask",
               "refName": "SqlAzureDacpacDeployment1",
               "enabled": true,
               "alwaysRun": false,
@@ -260,13 +266,13 @@
                 "ConnectedServiceNameSelector": "ConnectedServiceNameARM",
                 "ConnectedServiceName": "",
                 "ConnectedServiceNameARM": "da26eaa2-4a86-4d81-9d9a-f06a50ea615e",
-                "ServerName": "$(ServerName)",
+                "ServerName": "$(ServerName).database.windows.net",
                 "DatabaseName": "$(DatabaseName)",
                 "SqlUsername": "$(AdministratorLogin)",
                 "SqlPassword": "$(AdministratorPassword)",
-                "TaskNameSelector": "SqlTask",
-                "DacpacFile": "",
-                "SqlFile": "$(System.DefaultWorkingDirectory)/Workshop.DevOps.Build/database/script.sql",
+                "TaskNameSelector": "DacpacTask",
+                "DacpacFile": "$(System.DefaultWorkingDirectory)/Workshop.DevOps.Build.Advanced/database/script.sql",
+                "SqlFile": "",
                 "SqlInline": "",
                 "PublishProfile": "",
                 "AdditionalArguments": "",
@@ -354,10 +360,118 @@
       },
       "processParameters": {},
       "properties": {}
+    },
+    {
+      "id": 13,
+      "name": "Infra",
+      "rank": 3,
+      "variables": {},
+      "preDeployApprovals": {
+        "approvals": [
+          {
+            "rank": 1,
+            "isAutomated": true,
+            "isNotificationOn": false,
+            "id": 38
+          }
+        ]
+      },
+      "deployStep": {
+        "tasks": [],
+        "id": 39
+      },
+      "postDeployApprovals": {
+        "approvals": [
+          {
+            "rank": 1,
+            "isAutomated": true,
+            "isNotificationOn": false,
+            "id": 40
+          }
+        ]
+      },
+      "deployPhases": [
+        {
+          "deploymentInput": {
+            "parallelExecution": { "parallelExecutionType": "none" },
+            "skipArtifactsDownload": false,
+            "queueId": 12,
+            "demands": [],
+            "enableAccessToken": false,
+            "timeoutInMinutes": 0,
+            "jobCancelTimeoutInMinutes": 1,
+            "condition": "succeeded()",
+            "overrideInputs": {}
+          },
+          "rank": 1,
+          "phaseType": 1,
+          "name": "Agent phase",
+          "workflowTasks": [
+            {
+              "taskId": "94a74903-f93f-4075-884f-dc11f34058b4",
+              "version": "2.*",
+              "name": "Azure Deployment: Create Or Update Resource Group",
+              "refName": "AzureResourceGroupDeployment1",
+              "enabled": true,
+              "alwaysRun": false,
+              "continueOnError": false,
+              "timeoutInMinutes": 0,
+              "definitionType": "task",
+              "overrideInputs": {},
+              "condition": "succeeded()",
+              "inputs": {
+                "ConnectedServiceName": "da26eaa2-4a86-4d81-9d9a-f06a50ea615e",
+                "action": "Create Or Update Resource Group",
+                "resourceGroupName": "$(ResourceGroupName)",
+                "location": "$(Location)",
+                "templateLocation": "Linked artifact",
+                "csmFileLink": "",
+                "csmParametersFileLink": "",
+                "csmFile": "$(System.DefaultWorkingDirectory)/Workshop.DevOps.Build.Advanced/environment/ResourceGroup.json",
+                "csmParametersFile": "",
+                "overrideParameters": "-AdministratorLogin $(AdministratorLogin) -AdministratorPassword $(AdministratorPassword) -ServerName $(ServerName) -WebAppName $(WebAppName) -WebAppSlotName $(WebAppSlotName)",
+                "deploymentMode": "Incremental",
+                "enableDeploymentPrerequisites": "None",
+                "deploymentGroupEndpoint": "",
+                "project": "",
+                "deploymentGroupName": "",
+                "copyAzureVMTags": "true",
+                "outputVariable": ""
+              }
+            }
+          ]
+        }
+      ],
+      "environmentOptions": {
+        "emailNotificationType": "OnlyOnFailure",
+        "emailRecipients": "release.environment.owner;release.creator",
+        "skipArtifactsDownload": false,
+        "timeoutInMinutes": 0,
+        "enableAccessToken": false,
+        "publishDeploymentStatus": true
+      },
+      "demands": [],
+      "conditions": [
+        {
+          "name": "ReleaseStarted",
+          "conditionType": 1,
+          "value": ""
+        }
+      ],
+      "executionPolicy": {
+        "concurrencyCount": 0,
+        "queueDepthCount": 0
+      },
+      "schedules": [],
+      "retentionPolicy": {
+        "daysToKeep": 30,
+        "releasesToKeep": 3,
+        "retainBuild": true
+      },
+      "processParameters": {},
+      "properties": {}
     }
   ],
-  "triggers": [],
-  "releaseNameFormat": "Release-$(rev:r)",
   "tags": [],
   "properties": {}
 }

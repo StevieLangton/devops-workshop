@@ -1,4 +1,28 @@
 {
+  "options": [
+    {
+      "enabled": false,
+      "definition": { "id": "5d58cc01-7c75-450c-be18-a388ddb129ec" },
+      "inputs": {
+        "branchFilters": "[\"+refs/heads/*\"]",
+        "additionalFields": "{}"
+      }
+    },
+    {
+      "enabled": false,
+      "definition": { "id": "a9db38f9-9fdc-478c-b0f9-464221e58316" },
+      "inputs": {
+        "workItemType": "1712801",
+        "assignToRequestor": "true",
+        "additionalFields": "{}"
+      }
+    },
+    {
+      "enabled": false,
+      "definition": { "id": "57578776-4c22-4526-aeb0-86b6da17ee9c" },
+      "inputs": {}
+    }
+  ],
   "variables": {
     "BuildConfiguration": {
       "value": "release",
@@ -26,7 +50,6 @@
   ],
   "buildNumberFormat": "$(date:yyyyMMdd)$(rev:.r)",
   "jobAuthorizationScope": 1,
-  "jobTimeoutInMinutes": 60,
   "jobCancelTimeoutInMinutes": 5,
   "process": {
     "phases": [
@@ -144,6 +167,29 @@
               "Parallel": "false",
               "ParallelCount": "8"
             }
+          },
+          {
+            "environment": {},
+            "enabled": true,
+            "continueOnError": false,
+            "alwaysRun": false,
+            "displayName": "Publish Environment",
+            "timeoutInMinutes": 0,
+            "condition": "succeeded()",
+            "refName": "PublishBuildArtifacts7",
+            "task": {
+              "id": "2ff763a7-ce83-4e1f-bc89-0ae63477cebe",
+              "versionSpec": "1.*",
+              "definitionType": "task"
+            },
+            "inputs": {
+              "PathtoPublish": "Workshop.DevOps.Environment",
+              "ArtifactName": "environment",
+              "ArtifactType": "Container",
+              "TargetPath": "\\\\my\\share\\$(Build.DefinitionName)\\$(Build.BuildNumber)",
+              "Parallel": "false",
+              "ParallelCount": "8"
+            }
           }
         ],
         "variables": {},
@@ -169,7 +215,12 @@
       "skipSyncSource": "false",
       "checkoutNestedSubmodules": "false",
       "fetchDepth": "0"
-    }
+    },
+    "id": "f7e31d8c-25e8-4fb9-83cc-6c050fb09ab8",
+    "type": "TfsGit",
+    "defaultBranch": "refs/heads/master",
+    "clean": "false",
+    "checkoutSubmodules": false
   },
   "processParameters": {
     "inputs": [
@@ -196,9 +247,9 @@
       "isHosted": true
     }
   },
-  "id": 4,
-  "name": "Workshop.DevOps.Build",
-  "uri": "vstfs:///Build/Definition/4",
+  "id": 6,
+  "name": "Workshop.DevOps.Build.Advanced",
+  "uri": "vstfs:///Build/Definition/6",
   "path": "\\",
   "type": 2,
   "queueStatus": 0
