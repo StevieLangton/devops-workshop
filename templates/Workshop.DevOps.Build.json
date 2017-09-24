@@ -1,4 +1,10 @@
 {
+  "options": [
+    
+  ],
+  "triggers": [
+    
+  ],
   "variables": {
     "BuildConfiguration": {
       "value": "release",
@@ -24,6 +30,12 @@
       "deleteTestResults": true
     }
   ],
+  "metrics": [
+    
+  ],
+  "_links": {
+
+  },
   "buildNumberFormat": "$(date:yyyyMMdd)$(rev:.r)",
   "jobAuthorizationScope": 1,
   "jobTimeoutInMinutes": 60,
@@ -40,7 +52,6 @@
             "alwaysRun": false,
             "displayName": "Restore",
             "timeoutInMinutes": 0,
-            "condition": "succeeded()",
             "refName": "DotNetCoreCLI1",
             "task": {
               "id": "5541a522-603c-47ad-91fc-a4b1d163081b",
@@ -62,7 +73,6 @@
             "alwaysRun": false,
             "displayName": "Build",
             "timeoutInMinutes": 0,
-            "condition": "succeeded()",
             "refName": "DotNetCoreCLI2",
             "task": {
               "id": "5541a522-603c-47ad-91fc-a4b1d163081b",
@@ -84,7 +94,6 @@
             "alwaysRun": false,
             "displayName": "Publish",
             "timeoutInMinutes": 0,
-            "condition": "succeeded()",
             "refName": "DotNetCoreCLI4",
             "task": {
               "id": "5541a522-603c-47ad-91fc-a4b1d163081b",
@@ -103,29 +112,6 @@
             "environment": {},
             "enabled": true,
             "continueOnError": false,
-            "alwaysRun": true,
-            "displayName": "Publish Artifact",
-            "timeoutInMinutes": 0,
-            "condition": "succeededOrFailed()",
-            "refName": "PublishBuildArtifacts5",
-            "task": {
-              "id": "2ff763a7-ce83-4e1f-bc89-0ae63477cebe",
-              "versionSpec": "1.*",
-              "definitionType": "task"
-            },
-            "inputs": {
-              "PathtoPublish": "$(build.artifactstagingdirectory)",
-              "ArtifactName": "drop",
-              "ArtifactType": "Container",
-              "TargetPath": "\\\\my\\share\\$(Build.DefinitionName)\\$(Build.BuildNumber)",
-              "Parallel": "false",
-              "ParallelCount": "8"
-            }
-          },
-          {
-            "environment": {},
-            "enabled": true,
-            "continueOnError": false,
             "alwaysRun": false,
             "displayName": "Publish SQL Script",
             "timeoutInMinutes": 0,
@@ -137,8 +123,30 @@
               "definitionType": "task"
             },
             "inputs": {
-              "PathtoPublish": "Workshop.DevOps/Workshop.DevOps.Db",
-              "ArtifactName": "database",
+              "PathtoPublish": "script/script.sql",
+              "ArtifactName": "script",
+              "ArtifactType": "Container",
+              "TargetPath": "\\\\my\\share\\$(Build.DefinitionName)\\$(Build.BuildNumber)",
+              "Parallel": "false",
+              "ParallelCount": "8"
+            }
+          },
+          {
+            "environment": {},
+            "enabled": true,
+            "continueOnError": false,
+            "alwaysRun": false,
+            "displayName": "Publish Artifact",
+            "timeoutInMinutes": 0,
+            "refName": "PublishBuildArtifacts5",
+            "task": {
+              "id": "2ff763a7-ce83-4e1f-bc89-0ae63477cebe",
+              "versionSpec": "1.*",
+              "definitionType": "task"
+            },
+            "inputs": {
+              "PathtoPublish": "$(build.artifactstagingdirectory)",
+              "ArtifactName": "drop",
               "ArtifactType": "Container",
               "TargetPath": "\\\\my\\share\\$(Build.DefinitionName)\\$(Build.BuildNumber)",
               "Parallel": "false",
@@ -169,7 +177,9 @@
       "skipSyncSource": "false",
       "checkoutNestedSubmodules": "false",
       "fetchDepth": "0"
-    }
+    },
+    "type": "TfsGit",
+    "defaultBranch": "refs/heads/master"
   },
   "processParameters": {
     "inputs": [
@@ -187,10 +197,8 @@
     ]
   },
   "quality": 1,
-  "id": 4,
+  "id": 12,
   "name": "Workshop.DevOps.Build",
-  "uri": "vstfs:///Build/Definition/4",
   "path": "\\",
-  "type": 2,
-  "queueStatus": 0
+  "type": 2
 }

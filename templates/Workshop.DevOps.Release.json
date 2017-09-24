@@ -1,28 +1,26 @@
 {
-  "source": 2,
   "id": 1,
-  "revision": 20,
   "name": "Workshop.DevOps.Release",
   "description": null,
   "path": "\\",
   "variables": {
-    "AdministratorLogin": { "value": "" },
-    "AdministratorPassword": {
+    "AdminLogin": { "value": "" },
+    "AdminPassword": {
       "value": null,
       "isSecret": true
     },
-    "DatabaseName": { "value": "mydb" },
-    "ResourceGroupName": { "value": "" },
+    "DatabaseName": { "value": "devopsdb" },
+    "ResourceGroupName": { "value": "Workshop.DevOps" },
     "ServerName": { "value": "" },
-    "TestDatabaseName": { "value": "mydb.test" },
-    "WebAppName": { "value": "devops-fm" },
-    "WebAppSlotName": { "value": "PreProd" }
+    "StagingDatabaseName": { "value": "devopsdb.staging" },
+    "WebAppName": { "value": "" },
+    "WebAppSlotName": { "value": "staging" }
   },
   "variableGroups": [],
   "environments": [
     {
       "id": 1,
-      "name": "PreProd",
+      "name": "Staging",
       "rank": 1,
       "variables": {},
       "preDeployApprovals": {
@@ -31,13 +29,13 @@
             "rank": 1,
             "isAutomated": true,
             "isNotificationOn": false,
-            "id": 1
+            "id": 2
           }
         ]
       },
       "deployStep": {
         "tasks": [],
-        "id": 4
+        "id": 3
       },
       "postDeployApprovals": {
         "approvals": [
@@ -45,7 +43,7 @@
             "rank": 1,
             "isAutomated": true,
             "isNotificationOn": false,
-            "id": 5
+            "id": 6
           }
         ]
       },
@@ -54,7 +52,6 @@
           "deploymentInput": {
             "parallelExecution": { "parallelExecutionType": "none" },
             "skipArtifactsDownload": false,
-            "queueId": 10,
             "demands": [],
             "enableAccessToken": false,
             "timeoutInMinutes": 0,
@@ -69,7 +66,7 @@
             {
               "taskId": "ce85a08b-a538-4d2b-8589-1d37a9ab970f",
               "version": "1.*",
-              "name": "Execute Azure SQL : SqlTask",
+              "name": "Execute Azure SQL : Staging DB",
               "refName": "SqlAzureDacpacDeployment1",
               "enabled": true,
               "alwaysRun": false,
@@ -82,12 +79,12 @@
                 "ConnectedServiceNameSelector": "ConnectedServiceNameARM",
                 "ConnectedServiceName": "",
                 "ServerName": "$(ServerName).database.windows.net",
-                "DatabaseName": "$(TestDatabaseName)",
-                "SqlUsername": "$(AdministratorLogin)",
-                "SqlPassword": "$(AdministratorPassword)",
+                "DatabaseName": "$(StagingDatabaseName)",
+                "SqlUsername": "$(AdminLogin)",
+                "SqlPassword": "$(AdminPassword)",
                 "TaskNameSelector": "SqlTask",
                 "DacpacFile": "",
-                "SqlFile": "$(System.DefaultWorkingDirectory)/Workshop.DevOps.Build/database/script.sql",
+                "SqlFile": "$(System.DefaultWorkingDirectory)/Workshop.DevOps.Build/script/script.sql",
                 "SqlInline": "",
                 "PublishProfile": "",
                 "AdditionalArguments": "",
@@ -105,7 +102,6 @@
           "deploymentInput": {
             "parallelExecution": { "parallelExecutionType": "none" },
             "skipArtifactsDownload": false,
-            "queueId": 12,
             "demands": [],
             "enableAccessToken": false,
             "timeoutInMinutes": 0,
@@ -115,18 +111,18 @@
           },
           "rank": 2,
           "phaseType": 1,
-          "name": "Run on agent",
+          "name": "Agent phase",
           "workflowTasks": [
             {
               "taskId": "497d490f-eea7-4f2b-ab94-48d9c1acdcb1",
               "version": "3.*",
-              "name": "Deploy Azure App Service",
+              "name": "Azure App Service Deploy",
               "refName": "AzureRmWebAppDeployment1",
               "enabled": true,
               "alwaysRun": false,
               "continueOnError": false,
               "timeoutInMinutes": 0,
-              "definitionType": null,
+              "definitionType": "task",
               "overrideInputs": {},
               "condition": "succeeded()",
               "inputs": {
@@ -140,7 +136,7 @@
                 "DockerRepository": "",
                 "DockerImageTag": "",
                 "VirtualApplication": "",
-                "Package": "$(System.DefaultWorkingDirectory)\\**\\*.zip",
+                "Package": "$(System.DefaultWorkingDirectory)/**/*.zip",
                 "BuiltinLinuxPackage": "$(System.DefaultWorkingDirectory)/**/*.zip",
                 "RuntimeStack": "node|4.4",
                 "StartupCommand": "",
@@ -151,10 +147,10 @@
                 "GenerateWebConfig": "false",
                 "WebConfigParameters": "",
                 "AppSettings": "",
-                "TakeAppOfflineFlag": "true",
-                "UseWebDeploy": "true",
+                "TakeAppOfflineFlag": "false",
+                "UseWebDeploy": "false",
                 "SetParametersFile": "",
-                "RemoveAdditionalFilesFlag": "true",
+                "RemoveAdditionalFilesFlag": "false",
                 "ExcludeFilesFromAppDataFlag": "false",
                 "AdditionalArguments": "",
                 "RenameFilesFlag": "false",
@@ -202,6 +198,15 @@
       "variables": {},
       "preDeployApprovals": {
         "approvals": [
+          {
+            "rank": 1,
+            "isAutomated": false,
+            "isNotificationOn": false,
+            "approver": {
+              
+            },
+            "id": 7
+          }
         ],
         "approvalOptions": {
           "requiredApproverCount": 0,
@@ -213,7 +218,7 @@
       },
       "deployStep": {
         "tasks": [],
-        "id": 3
+        "id": 4
       },
       "postDeployApprovals": {
         "approvals": [
@@ -221,7 +226,7 @@
             "rank": 1,
             "isAutomated": true,
             "isNotificationOn": false,
-            "id": 6
+            "id": 5
           }
         ]
       },
@@ -230,7 +235,6 @@
           "deploymentInput": {
             "parallelExecution": { "parallelExecutionType": "none" },
             "skipArtifactsDownload": false,
-            "queueId": 10,
             "demands": [],
             "enableAccessToken": false,
             "timeoutInMinutes": 0,
@@ -259,11 +263,11 @@
                 "ConnectedServiceName": "",
                 "ServerName": "$(ServerName).database.windows.net",
                 "DatabaseName": "$(DatabaseName)",
-                "SqlUsername": "$(AdministratorLogin)",
-                "SqlPassword": "$(AdministratorPassword)",
+                "SqlUsername": "$(AdminLogin)",
+                "SqlPassword": "$(AdminPassword)",
                 "TaskNameSelector": "SqlTask",
                 "DacpacFile": "",
-                "SqlFile": "$(System.DefaultWorkingDirectory)/Workshop.DevOps.Build/database/script.sql",
+                "SqlFile": "$(System.DefaultWorkingDirectory)/Workshop.DevOps.Build/script/script.sql",
                 "SqlInline": "",
                 "PublishProfile": "",
                 "AdditionalArguments": "",
@@ -281,7 +285,6 @@
           "deploymentInput": {
             "parallelExecution": { "parallelExecutionType": "none" },
             "skipArtifactsDownload": false,
-            "queueId": 12,
             "demands": [],
             "enableAccessToken": false,
             "timeoutInMinutes": 0,
@@ -291,18 +294,18 @@
           },
           "rank": 2,
           "phaseType": 1,
-          "name": "Run on agent",
+          "name": "Agent phase",
           "workflowTasks": [
             {
               "taskId": "f045e430-8704-11e6-968f-e717e6411619",
               "version": "0.*",
-              "name": "Manage Azure App Service - Slot Swap",
-              "refName": "AzureAppServiceManage2",
+              "name": "Swap Slots: Staging to Prod",
+              "refName": "AzureAppServiceManage1",
               "enabled": true,
               "alwaysRun": false,
               "continueOnError": false,
               "timeoutInMinutes": 0,
-              "definitionType": null,
+              "definitionType": "task",
               "overrideInputs": {},
               "condition": "succeeded()",
               "inputs": {
@@ -311,7 +314,7 @@
                 "SpecifySlot": "false",
                 "ResourceGroupName": "$(ResourceGroupName)",
                 "SourceSlot": "$(WebAppSlotName)",
-                "SwapWithProduction": "True",
+                "SwapWithProduction": "true",
                 "TargetSlot": "",
                 "PreserveVnet": "false",
                 "Slot": "",
@@ -333,7 +336,7 @@
       "demands": [],
       "conditions": [
         {
-          "name": "PreProd",
+          "name": "Staging",
           "conditionType": 2,
           "value": "4"
         }
@@ -352,7 +355,12 @@
       "properties": {}
     }
   ],
-  "triggers": [],
+  "artifacts": [
+    
+  ],
+  "triggers": [
+    
+  ],
   "releaseNameFormat": "Release-$(rev:r)",
   "tags": [],
   "properties": {}
