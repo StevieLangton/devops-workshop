@@ -1,0 +1,17 @@
+﻿using Microsoft.AspNetCore.Mvc;
+
+namespace Workshop.DevOps.Source.Web.Controllers
+{
+    public class HomeController : Controller
+    {
+        public IActionResult About()
+        {
+            return View();
+        }
+
+        public IActionResult Contact()
+        {
+            return View();
+        }
+    }
+}
