@@ -11,6 +11,12 @@
     "ServerName": {
       "type": "string"
     },
+    "DatabaseName": {
+      "type": "string"
+    },
+    "StagingDatabaseName": {
+      "type": "string"
+    },
     "WebAppName": {
       "type": "string"
     },
@@ -19,13 +25,13 @@
     }
   },
   "variables": {
-    "Location": "West Europe"
+    "PlanName": "HostingPlan"
   },
   "resources": [
     {
       "name": "[parameters('ServerName')]",
       "type": "Microsoft.Sql/servers",
-      "location": "[variables('Location')]",
+      "location": "[resourceGroup().location]",
       "tags": {
         "displayName": "SqlServer"
       },
@@ -36,9 +42,9 @@
       },
       "resources": [
         {
-          "name": "mydb",
+          "name": "[parameters('DatabaseName')]",
           "type": "databases",
-          "location": "[variables('Location')]",
+          "location": "[resourceGroup().location]",
           "tags": {
             "displayName": "Database"
           },
@@ -53,11 +59,11 @@
           }
         },
         {
-          "name": "mydb.test",
+          "name": "[parameters('StagingDatabaseName')]",
           "type": "databases",
-          "location": "[variables('Location')]",
+          "location": "[resourceGroup().location]",
           "tags": {
-            "displayName": "Database"
+            "displayName": "StagingDatabase"
           },
           "apiVersion": "2014-04-01-preview",
           "dependsOn": [
@@ -71,50 +77,49 @@
         },
         {
           "type": "firewallrules",
-          "apiVersion": "2014-04-01-preview",
-          "dependsOn": [
-            "[resourceId('Microsoft.Sql/servers/', parameters('ServerName'))]"
-          ],
-          "location": "[variables('Location')]",
           "name": "AllowAllWindowsAzureIps",
+          "apiVersion": "2014-04-01-preview",
+          "location": "[resourceGroup().location]",
           "properties": {
             "endIpAddress": "0.0.0.0",
             "startIpAddress": "0.0.0.0"
-          }
+          },
+          "dependsOn": [
+            "[concat('Microsoft.Sql/servers/', parameters('serverName'))]"
+          ]
         }
       ]
     },
     {
       "apiVersion": "2015-08-01",
-      "name": "MyPlan",
+      "name": "[variables('PlanName')]",
       "type": "Microsoft.Web/serverfarms",
-      "location": "[variables('Location')]",
+      "location": "[resourceGroup().location]",
       "tags": {
         "displayName": "HostingPlan"
       },
       "sku": {
         "name": "S1",
-        "capacity": "1"
+        "capacity": 1
       },
       "properties": {
-        "name": "MyPlan"
+        "name": "[variables('PlanName')]"
       }
     },
     {
       "apiVersion": "2015-08-01",
       "name": "[parameters('WebAppName')]",
       "type": "Microsoft.Web/sites",
-      "location": "[variables('Location')]",
+      "location": "[resourceGroup().location]",
       "dependsOn": [
-        "[resourceId('Microsoft.Web/serverFarms/', 'MyPlan')]"
+        "[resourceId('Microsoft.Web/serverFarms/', variables('PlanName'))]"
       ],
       "tags": {
-        "[concat('hidden-related:', resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', 'MyPlan')]": "empty",
-        "displayName": "Website"
+        "displayName": "WebApp"
       },
       "properties": {
         "name": "[parameters('WebAppName')]",
-        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', 'MyPlan')]"
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('PlanName'))]"
       },
       "resources": [
         {
@@ -126,16 +131,27 @@
           ],
           "properties": {
             "DefaultConnection": {
-              "value": "[concat('Data Source=tcp:', reference(resourceId('Microsoft.Sql/servers/', parameters('ServerName'))).fullyQualifiedDomainName, ',1433;Initial Catalog=mydb', ';User Id=', parameters('AdminLogin'), '@', parameters('ServerName'), ';Password=', parameters('AdminPassword'), ';')]",
+              "value": "[concat('Data Source=tcp:', reference(resourceId('Microsoft.Sql/servers/', parameters('ServerName'))).fullyQualifiedDomainName, ',1433;Initial Catalog=', parameters('DatabaseName'), ';User Id=', parameters('AdminLogin'), '@', parameters('ServerName'), ';Password=', parameters('AdminPassword'), ';')]",
               "type": "SQLServer"
             }
           }
         },
         {
           "apiVersion": "2015-08-01",
+          "name": "slotconfignames",
+          "type": "config",
+          "dependsOn": [
+            "[resourceId('Microsoft.Web/Sites', parameters('WebAppName'))]"
+          ],
+          "properties": {
+            "connectionStringNames": [ "DefaultConnection" ]
+          }
+        },
+        {
+          "apiVersion": "2015-08-01",
           "name": "[parameters('WebAppSlotName')]",
           "type": "slots",
-          "location": "[variables('Location')]",
+          "location": "[resourceGroup().location]",
           "dependsOn": [
             "[resourceId('Microsoft.Web/Sites', parameters('WebAppName'))]"
           ],
@@ -151,7 +167,7 @@
               ],
               "properties": {
                 "DefaultConnection": {
-                  "value": "[concat('Data Source=tcp:', reference(resourceId('Microsoft.Sql/servers/', parameters('ServerName'))).fullyQualifiedDomainName, ',1433;Initial Catalog=mydb.test', ';User Id=', parameters('AdminLogin'), '@', parameters('ServerName'), ';Password=', parameters('AdminPassword'), ';')]",
+                  "value": "[concat('Data Source=tcp:', reference(resourceId('Microsoft.Sql/servers/', parameters('ServerName'))).fullyQualifiedDomainName, ',1433;Initial Catalog=', parameters('StagingDatabaseName'), ';User Id=', parameters('AdminLogin'), '@', parameters('ServerName'), ';Password=', parameters('AdminPassword'), ';')]",
                   "type": "SQLServer"
                 }
               }
