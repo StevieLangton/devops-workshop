@@ -1,2 +1,4 @@
 # Start using templates - Basic : Azure
-Work in progress ...
+### Step 1 : Download the Template
+
+### Step 2 : Import the Template
