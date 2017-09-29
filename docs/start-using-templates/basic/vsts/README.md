@@ -1,2 +1,2 @@
-# DevOps Workshop Documentation
+# Start using templates - Basic : VSTS
 Work in progress ...

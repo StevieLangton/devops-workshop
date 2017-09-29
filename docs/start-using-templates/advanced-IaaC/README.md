@@ -1,2 +1,2 @@
-# DevOps Workshop Documentation
+# Start using templates - Advanced (IaaC)
 Work in progress ...

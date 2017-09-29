@@ -1,2 +1,2 @@
-# DevOps Workshop Documentation
+# Start using templates - Basic : Azure
 Work in progress ...

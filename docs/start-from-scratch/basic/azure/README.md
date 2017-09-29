@@ -1,2 +1,2 @@
-# DevOps Workshop Documentation
+# Start from scratch - Basic : Azure
 Work in progress ...
