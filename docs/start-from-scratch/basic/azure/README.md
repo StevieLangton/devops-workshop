@@ -21,4 +21,4 @@ Below are the steps :
 
 Now, we have the environment in Microsoft Azure as follows :
 
-[![Environment](images/environment.png)](https://youtu.be/yDGeXzvWJmE)
+[![Environment](images/environment.png)](https://www.youtube.com/playlist?list=PLoqgDiApBsG-NFuoTIV7uoRuEshh7YqsK)
