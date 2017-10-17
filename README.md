@@ -13,3 +13,13 @@ To get started, visit the [wiki section](https://github.com/fimdim/devops-worksh
     - [Azure](https://github.com/fimdim/devops-workshop/wiki/Start-using-templates-I-Basic-I-Azure)
     - [VSTS](https://github.com/fimdim/devops-workshop/wiki/Start-using-templates-I-Basic-I-VSTS)
   - [Advanced (IaaC)](https://github.com/fimdim/devops-workshop/wiki/Start-using-templates-I-Advanced)
+
+
+## Resources
+[visualstudio.com/DevOps](http://visualstudio.com/DevOps)
+
+[docs.microsoft.com](http://docs.microsoft.com)
+
+[mva.microsoft.com](http://mva.microsoft.com)
+
+[channel9.msdn.com](https://channel9.msdn.com/)
