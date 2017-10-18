@@ -123,7 +123,7 @@
               "definitionType": "task"
             },
             "inputs": {
-              "PathtoPublish": "script/script.sql",
+              "PathtoPublish": "script",
               "ArtifactName": "script",
               "ArtifactType": "Container",
               "TargetPath": "\\\\my\\share\\$(Build.DefinitionName)\\$(Build.BuildNumber)",

@@ -1,27 +1,6 @@
 {
   "options": [
-    {
-      "enabled": false,
-      "definition": { "id": "5d58cc01-7c75-450c-be18-a388ddb129ec" },
-      "inputs": {
-        "branchFilters": "[\"+refs/heads/*\"]",
-        "additionalFields": "{}"
-      }
-    },
-    {
-      "enabled": false,
-      "definition": { "id": "a9db38f9-9fdc-478c-b0f9-464221e58316" },
-      "inputs": {
-        "workItemType": "1712801",
-        "assignToRequestor": "true",
-        "additionalFields": "{}"
-      }
-    },
-    {
-      "enabled": false,
-      "definition": { "id": "57578776-4c22-4526-aeb0-86b6da17ee9c" },
-      "inputs": {}
-    }
+    
   ],
   "variables": {
     "BuildConfiguration": {
@@ -160,8 +139,8 @@
               "definitionType": "task"
             },
             "inputs": {
-              "PathtoPublish": "Workshop.DevOps.Db",
-              "ArtifactName": "database",
+              "PathtoPublish": "script",
+              "ArtifactName": "script",
               "ArtifactType": "Container",
               "TargetPath": "\\\\my\\share\\$(Build.DefinitionName)\\$(Build.BuildNumber)",
               "Parallel": "false",
@@ -183,7 +162,7 @@
               "definitionType": "task"
             },
             "inputs": {
-              "PathtoPublish": "Workshop.DevOps.Environment",
+              "PathtoPublish": "environment",
               "ArtifactName": "environment",
               "ArtifactType": "Container",
               "TargetPath": "\\\\my\\share\\$(Build.DefinitionName)\\$(Build.BuildNumber)",
@@ -238,19 +217,8 @@
     ]
   },
   "quality": 1,
-  "queue": {
-    "id": 12,
-    "name": "Hosted VS2017",
-    "pool": {
-      "id": 4,
-      "name": "Hosted VS2017",
-      "isHosted": true
-    }
-  },
   "id": 6,
   "name": "Workshop.DevOps.Build.Advanced",
-  "uri": "vstfs:///Build/Definition/6",
   "path": "\\",
-  "type": 2,
-  "queueStatus": 0
+  "type": 2
 }

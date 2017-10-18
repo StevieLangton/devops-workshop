@@ -1,28 +1,22 @@
 {
-  "source": 2,
-  "id": 6,
   "name": "Workshop.DevOps.Release.Advanced",
-  "description": null,
-  "path": "\\",
   "variables": {
-    "AdministratorLogin": { "value": "" },
-    "AdministratorPassword": {
+    "AdminLogin": { "value": "" },
+    "AdminPassword": {
       "value": null,
       "isSecret": true
     },
     "DatabaseName": { "value": "mydb" },
-    "Location": { "value": "West Europe" },
-    "ResourceGroupName": { "value": "" },
+    "ResourceGroupName": { "value": "DevOps.Workshop" },
     "ServerName": { "value": "" },
-    "TestDatabaseName": { "value": "mydb.test" },
+    "StagingDatabaseName": { "value": "mydb.test" },
     "WebAppName": { "value": "" },
-    "WebAppSlotName": { "value": "preprod" }
+    "WebAppSlotName": { "value": "staging" }
   },
   "variableGroups": [],
   "environments": [
     {
-      "id": 11,
-      "name": "PreProd",
+      "name": "Staging",
       "rank": 1,
       "variables": {},
       "preDeployApprovals": {
@@ -54,7 +48,6 @@
           "deploymentInput": {
             "parallelExecution": { "parallelExecutionType": "none" },
             "skipArtifactsDownload": false,
-            "queueId": 12,
             "demands": [],
             "enableAccessToken": false,
             "timeoutInMinutes": 0,
@@ -83,12 +76,12 @@
                 "ConnectedServiceName": "",
                 "ConnectedServiceNameARM": "da26eaa2-4a86-4d81-9d9a-f06a50ea615e",
                 "ServerName": "$(ServerName).database.windows.net",
-                "DatabaseName": "$(TestDatabaseName)",
-                "SqlUsername": "$(AdministratorLogin)",
-                "SqlPassword": "$(AdministratorPassword)",
+                "DatabaseName": "$(StagingDatabaseName)",
+                "SqlUsername": "$(AdminLogin)",
+                "SqlPassword": "$(AdminPassword)",
                 "TaskNameSelector": "SqlTask",
                 "DacpacFile": "",
-                "SqlFile": "$(System.DefaultWorkingDirectory)/Workshop.DevOps.Build.Advanced/database/script.sql",
+                "SqlFile": "$(System.DefaultWorkingDirectory)/Workshop.DevOps.Build.Advanced/script/script.sql",
                 "SqlInline": "",
                 "PublishProfile": "",
                 "AdditionalArguments": "",
@@ -198,7 +191,6 @@
       "properties": {}
     },
     {
-      "id": 12,
       "name": "Prod",
       "rank": 2,
       "variables": {},
@@ -253,7 +245,7 @@
             {
               "taskId": "ce85a08b-a538-4d2b-8589-1d37a9ab970f",
               "version": "1.*",
-              "name": "Execute Azure SQL : DacpacTask",
+              "name": "Execute Azure SQL : SqlTask",
               "refName": "SqlAzureDacpacDeployment1",
               "enabled": true,
               "alwaysRun": false,
@@ -268,9 +260,9 @@
                 "ConnectedServiceNameARM": "da26eaa2-4a86-4d81-9d9a-f06a50ea615e",
                 "ServerName": "$(ServerName).database.windows.net",
                 "DatabaseName": "$(DatabaseName)",
-                "SqlUsername": "$(AdministratorLogin)",
-                "SqlPassword": "$(AdministratorPassword)",
-                "TaskNameSelector": "DacpacTask",
+                "SqlUsername": "$(AdminLogin)",
+                "SqlPassword": "$(AdminPassword)",
+                "TaskNameSelector": "SqlTask",
                 "DacpacFile": "$(System.DefaultWorkingDirectory)/Workshop.DevOps.Build.Advanced/database/script.sql",
                 "SqlFile": "",
                 "SqlInline": "",
@@ -343,7 +335,7 @@
       "demands": [],
       "conditions": [
         {
-          "name": "PreProd",
+          "name": "Staging",
           "conditionType": 2,
           "value": "4"
         }
@@ -423,13 +415,13 @@
                 "ConnectedServiceName": "da26eaa2-4a86-4d81-9d9a-f06a50ea615e",
                 "action": "Create Or Update Resource Group",
                 "resourceGroupName": "$(ResourceGroupName)",
-                "location": "$(Location)",
+                "location": "",
                 "templateLocation": "Linked artifact",
                 "csmFileLink": "",
                 "csmParametersFileLink": "",
                 "csmFile": "$(System.DefaultWorkingDirectory)/Workshop.DevOps.Build.Advanced/environment/ResourceGroup.json",
                 "csmParametersFile": "",
-                "overrideParameters": "-AdministratorLogin $(AdministratorLogin) -AdministratorPassword $(AdministratorPassword) -ServerName $(ServerName) -WebAppName $(WebAppName) -WebAppSlotName $(WebAppSlotName)",
+                "overrideParameters": "-AdminLogin $(AdminLogin) -AdminPassword $(AdminPassword) -ServerName $(ServerName) -WebAppName $(WebAppName) -WebAppSlotName $(WebAppSlotName) -DatabaseName $(DatabaseName) -StagingDatabaseName $(StagingDatabaseName)",
                 "deploymentMode": "Incremental",
                 "enableDeploymentPrerequisites": "None",
                 "deploymentGroupEndpoint": "",
